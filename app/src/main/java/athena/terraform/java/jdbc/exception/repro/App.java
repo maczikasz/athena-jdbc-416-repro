@@ -25,8 +25,20 @@ public class App {
         String url = "jdbc:athena://";
         AthenaDriver driver = new AthenaDriver();
         Connection connection = driver.connect(url, connectionParameters);
+
+        // These queries work
+        executeQuery(connection, "SELECT * from test");
+        executeQuery(connection, "SELECT * from props");
+
+        // This query works
+        executeQuery(connection, "SHOW TBLPROPERTIES props");
+
+        // This query fails
+        executeQuery(connection, "SHOW TBLPROPERTIES test");
+    }
+
+    private static void executeQuery(Connection connection, String query) throws SQLException {
         Statement statement = connection.createStatement();
-        String query = "SHOW TBLPROPERTIES test";
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             System.out.println(resultSet.getString(1));
